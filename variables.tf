@@ -24,7 +24,8 @@ variable "core_dns_defaulta" {
 variable "core_dns_defaulttxt" {
   type = map(map(string))
   default = {
-    @ = {
+    at = {
+      name  = "@"
       value = "v=spf1 include:spf.protection.outlook.com -all"
       ttl   = 5
     }

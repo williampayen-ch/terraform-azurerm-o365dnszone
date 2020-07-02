@@ -26,7 +26,7 @@ resource "azurerm_dns_txt_record" "dns-txt" {
   zone_name           = var.core_dns_zone
   resource_group_name = var.core_dns_zone_rgname
 
-  name = each.key
+  name = each.value["name"]
   ttl  = each.value["ttl"]
 
   record {
