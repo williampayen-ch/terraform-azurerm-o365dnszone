@@ -22,20 +22,19 @@ variable "core_dns_defaulta" {
 }
 
 variable "core_dns_defaulttxt" {
-  type = list(map(string))
-  default = [
-    {
-      name  = "@"
+  type = map(map(string))
+  default = {
+    @ = {
       value = "v=spf1 include:spf.protection.outlook.com -all"
       ttl   = 5
     }
-  ]
+  }
 }
 
 variable "core_dns_defaultsrv" {
-  type = list(map(string))
-  default = [
-    {
+  type = map(map(string))
+  default = {
+    sipfederation = {
       name     = "_sipfederationtls._tcp"
       target   = "sipfed.online.lync.com"
       ttl      = 5
@@ -43,7 +42,7 @@ variable "core_dns_defaultsrv" {
       weight   = 1
       port     = 5061
     },
-    {
+    siptls = {
       name     = "_sip._tls"
       target   = "sipdir.online.lync.com."
       ttl      = 5
@@ -51,43 +50,37 @@ variable "core_dns_defaultsrv" {
       weight   = 1
       port     = 443
     }
-  ]
+  }
 }
 
 
 variable "core_dns_defaultcname" {
-  type = list(map(string))
-  default = [
-    {
-      name   = "autodiscover"
+  type = map(map(string))
+  default = {
+    autodiscover = {
       record = "autodiscover.outlook.com"
       ttl    = 5
     },
-    {
-      name   = "enterpriseenrollment"
+    enterpriseenrollment = {
       record = "enterpriseenrollment.manage.microsoft.com"
       ttl    = 5
     },
-    {
-      name   = "enterpriseregistration"
+    enterpriseregistration = {
       record = "enterpriseregistration.windows.net"
       ttl    = 5
     },
-    {
-      name   = "lyncdiscover"
+    lyncdiscover = {
       record = "webdir.online.lync.com"
       ttl    = 5
     },
-    {
-      name   = "msoid"
+    msoid = {
       record = "clientconfig.microsoftonline-p.net"
       ttl    = 5
     },
-    {
-      name   = "sip"
+    sip = {
       record = "sipdir.online.lync.com"
       ttl    = 5
     }
-  ]
+  }
 }
 

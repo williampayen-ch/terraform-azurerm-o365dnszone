@@ -6,7 +6,7 @@ resource "azurerm_dns_zone" "dns" {
 }
 
 resource "azurerm_dns_mx_record" "dns-mx" {
-  zone_name           = azurerm_dns_zone.dns.zone_name
+  zone_name           = var.core_dns_zone
   resource_group_name = var.core_dns_zone_rgname
 
   name = "@"
@@ -20,46 +20,48 @@ resource "azurerm_dns_mx_record" "dns-mx" {
   tags = var.tags
 }
 
+
 resource "azurerm_dns_txt_record" "dns-txt" {
-  foreach             = var.core_dns_defaulttxt
+  for_each            = var.core_dns_defaulttxt
   zone_name           = var.core_dns_zone
   resource_group_name = var.core_dns_zone_rgname
 
-  name = var.core_dns_defaulttxt["name"]
-  ttl  = var.core_dns_defaulttxt["ttl"]
+  name = each.key
+  ttl  = each.value["ttl"]
 
   record {
-    value = var.core_dns_defaulttxt["value"]
+    value = each.value["value"]
   }
 
   tags = var.tags
 }
+
 resource "azurerm_dns_srv_record" "dns-srv" {
-  foreach             = var.core_dns_defaultsrv
+  for_each            = var.core_dns_defaultsrv
   zone_name           = var.core_dns_zone
   resource_group_name = var.core_dns_zone_rgname
 
-  name = var.core_dns_defaultsrv["name"]
-  ttl  = var.core_dns_defaultsrv["ttl"]
+  name = each.value["name"]
+  ttl  = each.value["ttl"]
 
   record {
-    priority = var.core_dns_defaultsrv["priority"]
-    weight   = var.core_dns_defaultsrv["weight"]
-    port     = var.core_dns_defaultsrv["port"]
-    target   = var.core_dns_defaultsrv["target"]
+    priority = each.value["priority"]
+    weight   = each.value["weight"]
+    port     = each.value["port"]
+    target   = each.value["target"]
   }
 
   tags = var.tags
 }
 
 resource "azurerm_dns_cname_record" "dns-cname" {
-  foreach             = var.core_dns_defaultcname
+  for_each            = var.core_dns_defaultcname
   zone_name           = var.core_dns_zone
   resource_group_name = var.core_dns_zone_rgname
 
-  name   = var.core_dns_defaultcname["name"]
-  ttl    = var.core_dns_defaultcname["ttl"]
-  record = var.core_dns_defaultcname["record"]
+  name   = each.key
+  ttl    = each.value["ttl"]
+  record = each.value["record"]
 
   tags = var.tags
 }
